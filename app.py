@@ -354,23 +354,24 @@ with st.sidebar:
 # ═══════════════════════════════════════════════════════════
 # LOAD DATA
 # ═══════════════════════════════════════════════════════════
+def process_df(raw_df):
+    raw_df["Date"] = pd.to_datetime(raw_df["Date"])
+    raw_df["Month"] = raw_df["Date"].dt.month
+    raw_df["MonthName"] = raw_df["Date"].dt.strftime("%b")
+    np.random.seed(99)
+    atm_list = raw_df["ATM_ID"].unique()
+    raw_df["lat"] = raw_df["ATM_ID"].map({a: np.random.uniform(8.5, 35.0) for a in atm_list})
+    raw_df["lon"] = raw_df["ATM_ID"].map({a: np.random.uniform(68.0, 97.5) for a in atm_list})
+    return raw_df
+
 if uploaded:
     import io
-    df = load_data.__wrapped__(None) if hasattr(load_data, '__wrapped__') else None
-    raw = uploaded.read()
-    df = pd.read_csv(io.BytesIO(raw))
-    df["Date"] = pd.to_datetime(df["Date"])
-    df["Month"] = df["Date"].dt.month
-    df["MonthName"] = df["Date"].dt.strftime("%b")
-    np.random.seed(99)
-    atm_list = df["ATM_ID"].unique()
-    df["lat"] = df["ATM_ID"].map({a: np.random.uniform(8.5, 35.0) for a in atm_list})
-    df["lon"] = df["ATM_ID"].map({a: np.random.uniform(68.0, 97.5) for a in atm_list})
+    df = process_df(pd.read_csv(io.BytesIO(uploaded.read())))
 else:
     try:
         df = load_data("atm_cash_management_dataset.csv")
     except Exception:
-        st.error("⚠️ Please upload your dataset using the sidebar.")
+        st.error("⚠️ Please upload your dataset (atm_cash_management_dataset.csv) using the sidebar.")
         st.stop()
 
 
