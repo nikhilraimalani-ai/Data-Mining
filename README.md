@@ -54,3 +54,7 @@ which machines to prioritise.
 Two maps — a density heatmap showing where demand concentrates geographically, and a bubble map
 where each ATM is sized by its average withdrawal volume. Toggle between a dark and light map
 style, and switch the color metric between average withdrawals, holiday rate, or total records.
+
+
+LINK: https://nikhilraimalanidata-mining.streamlit.app/
+
